@@ -13,20 +13,20 @@ var detectNetwork = function(cardNumber) {
   // The American Express network always starts with a 34 or 37 and is 15 digits long
 
   // Once you've read this, go ahead and try to implement this function, then return to the console.
-  var cardInfo = {
-    'Diner\'s Club': {cardLengths: [14], prefixes: [38, 39]},
-    'American Express': {cardLengths: [15], prefixes: [34, 37]},
-    'Visa': {cardLengths: [13, 16, 19], prefixes: [4]},
-    'MasterCard': {cardLengths: [16], prefixes: [51, 52, 53, 54, 55]},
-    'Discover': {cardLengths: [16, 19], prefixes: [6011, 644, 645, 646, 647, 648, 649, 65]},
-    'Maestro': {cardLengths: [12, 13, 14, 15, 16, 17, 18, 19], prefixes: [5018, 5020, 5038, 6304]}
-  };
-  for (cardName in cardInfo) {
-    card = cardInfo[cardName];
+  var cardInfo = [
+    {cardName: 'Diner\'s Club', cardLengths: [14], prefixes: [38, 39]},
+    {cardName: 'American Express', cardLengths: [15], prefixes: [34, 37]},
+    {cardName: 'Visa', cardLengths: [13, 16, 19], prefixes: [4]},
+    {cardName: 'MasterCard', cardLengths: [16], prefixes: [51, 52, 53, 54, 55]},
+    {cardName: 'Discover', cardLengths: [16, 19], prefixes: [6011, 644, 645, 646, 647, 648, 649, 65]},
+    {cardName: 'Maestro', cardLengths: [12, 13, 14, 15, 16, 17, 18, 19], prefixes: [5018, 5020, 5038, 6304]}
+  ];
+  for (var i = 0; i < cardInfo.length; i++) {
+    card = cardInfo[i];
     if (card.cardLengths.includes(cardNumber.length)) {
       for (var prefixIndex = 0; prefixIndex < card.prefixes.length; prefixIndex++) {
         if (cardNumber.startsWith(card.prefixes[prefixIndex].toString())) {
-          return cardName;
+          return card.cardName;
         }
       }
     }
