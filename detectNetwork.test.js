@@ -128,18 +128,70 @@ describe('Discover', function() {
       });
     })(prefix);
   }
-
 });
 
 describe('Maestro', function() {
   var prefixes = [5018, 5020, 5038, 6304];
   for (var cardLength = 12; cardLength <= 19; cardLength++) {
     for (var prefixIndex = 0; prefixIndex < prefixes.length; prefixIndex++) {
-      prefix = prefixes[prefixIndex];
+      var prefix = prefixes[prefixIndex];
       (function(prefix, cardLength) {
         it('has a prefix of ' + prefix + ' and a length of ' + cardLength, function() {
           var testCard = prefix + '6304345678901234567'.slice(prefix.toString().length, cardLength);
           detectNetwork(testCard).should.equal('Maestro');
+        });
+      })(prefix, cardLength);
+    }
+  }
+});
+
+describe('China UnionPay', function() {
+  var prefixRanges = ['622126-622925', '624-626', '6282-6288'];
+  var cardLengths = [16, 17, 18, 19];
+  var prefixes = [];
+
+  var buildPrefixRange = function(low, high) {
+    var results = [];
+    for (var i = low; i <= high; i++) {
+      results.push(i);
+    }
+    return results;
+  };
+
+  for (var prefixIndex = 0; prefixIndex < prefixRanges.length; prefixIndex++) {
+    var prefix = prefixRanges[prefixIndex];
+    var dashLocation = prefix.indexOf('-');
+    if (dashLocation !== -1) {
+      var newPrefixes = buildPrefixRange(Number(prefix.slice(0, dashLocation)), Number(prefix.slice(dashLocation + 1)));
+      prefixes = prefixes.concat(newPrefixes);
+    }
+  }
+
+  for (var cardLengthIndex = 0; cardLengthIndex < cardLengths.length; cardLengthIndex++) {
+    var cardLength = cardLengths[cardLengthIndex];
+    for (var prefixIndex = 0; prefixIndex < prefixes.length; prefixIndex++) {
+      var prefix = prefixes[prefixIndex];
+      (function(prefix, cardLength) {
+        it('has a prefix of ' + prefix + ' and a length of ' + cardLength, function() {
+          var testCard = prefix + '6221265678901234567'.slice(prefix.toString().length, cardLength);
+          detectNetwork(testCard).should.equal('China UnionPay');
+        });
+      })(prefix, cardLength);
+    }
+  }
+});
+
+describe('Switch', function() {
+  var prefixes = [4903, 4905, 4911, 4936, 564182, 633110, 6333, 6759];
+  var cardLengths = [16, 18, 19];
+  for (var cardLengthIndex = 0; cardLengthIndex < cardLengths.length; cardLengthIndex++) {
+    for (var prefixIndex = 0; prefixIndex < prefixes.length; prefixIndex++) {
+      var prefix = prefixes[prefixIndex];
+      var cardLength = cardLengths[cardLengthIndex];
+      (function(prefix, cardLength) {
+        it('has a prefix of ' + prefix + ' and a length of ' + cardLength, function() {
+          var testCard = prefix + '6759345678901234567'.slice(prefix.toString().length, cardLength);
+          detectNetwork(testCard).should.equal('Switch');
         });
       })(prefix, cardLength);
     }
