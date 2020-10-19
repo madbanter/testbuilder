@@ -16,19 +16,33 @@ var detectNetwork = function(cardNumber) {
   var cardInfo = [
     {cardName: 'Diner\'s Club', cardLengths: [14], prefixes: [38, 39]},
     {cardName: 'American Express', cardLengths: [15], prefixes: [34, 37]},
+    {cardName: 'Switch', cardLengths: [16, 18, 19], prefixes: [4903, 4905, 4911, 4936, 564182, 633110, 6333, 6759]},
     {cardName: 'Visa', cardLengths: [13, 16, 19], prefixes: [4]},
     {cardName: 'MasterCard', cardLengths: [16], prefixes: [51, 52, 53, 54, 55]},
     {cardName: 'Discover', cardLengths: [16, 19], prefixes: [6011, 644, 645, 646, 647, 648, 649, 65]},
-    {cardName: 'Maestro', cardLengths: [12, 13, 14, 15, 16, 17, 18, 19], prefixes: [5018, 5020, 5038, 6304]}
+    {cardName: 'Maestro', cardLengths: [12, 13, 14, 15, 16, 17, 18, 19], prefixes: [5018, 5020, 5038, 6304]},
+    {cardName: 'China UnionPay', cardLengths: [16, 17, 18, 19], prefixes: ['622126-622925', '624-626', '6282-6288']}
   ];
   for (var i = 0; i < cardInfo.length; i++) {
     card = cardInfo[i];
     if (card.cardLengths.includes(cardNumber.length)) {
       for (var prefixIndex = 0; prefixIndex < card.prefixes.length; prefixIndex++) {
-        if (cardNumber.startsWith(card.prefixes[prefixIndex].toString())) {
+        var prefix = card.prefixes[prefixIndex].toString();
+        var dashLocation = prefix.indexOf('-');
+        if (dashLocation !== -1) {
+          var prefixInRange = checkPrefixRange(cardNumber, prefix.slice(0, dashLocation), prefix.slice(dashLocation + 1));
+          if (prefixInRange) {
+            return card.cardName;
+          }
+        } else if (cardNumber.startsWith(prefix)) {
           return card.cardName;
         }
       }
     }
   }
+};
+
+var checkPrefixRange = function(num, low, high) {
+  var cardPrefix = Number(num.slice(0, high.length));
+  return cardPrefix >= Number(low) && cardPrefix <= Number(high);
 };
