@@ -17,7 +17,9 @@ var detectNetwork = function(cardNumber) {
     'Diner\'s Club': {cardLengths: [14], prefixes: [38, 39]},
     'American Express': {cardLengths: [15], prefixes: [34, 37]},
     'Visa': {cardLengths: [13, 16, 19], prefixes: [4]},
-    'MasterCard': {cardLengths: [16], prefixes: [51, 52, 53, 54, 55]}
+    'MasterCard': {cardLengths: [16], prefixes: [51, 52, 53, 54, 55]},
+    'Discover': {cardLengths: [16, 19], prefixes: [6011, 644, 645, 646, 647, 648, 649, 65]},
+    'Maestro': {cardLengths: [12, 13, 14, 15, 16, 17, 18, 19], prefixes: [5018, 5020, 5038, 6304]}
   };
   for (cardName in cardInfo) {
     card = cardInfo[cardName];
